@@ -52,12 +52,14 @@ public class Ship extends Sudno {
 		return super.displacement;
 	}
 
+	@Override
 	public void moveSudno(Graphics g) {
 		startX += (maxSpeed * 50 / (displacement / 100))
 				/ (CrewCount == 0 ? 1 : CrewCount);
 		drawSudno(g);
 	}
 
+	@Override
 	public void drawSudno(Graphics g) {
 		drawNormalSudno(g);
 	}
@@ -90,5 +92,10 @@ public class Ship extends Sudno {
 		g2.drawOval(startX + 35, startY + 15, 10, 10);
 		g2.drawOval(startX + 45, startY + 15, 10, 10);
 		g2.drawRect(startX + 30, startY + 5, 45, 30);
+	}
+
+	@Override
+	public void setMainColor(Color newColor) {
+		color = newColor;
 	}
 }

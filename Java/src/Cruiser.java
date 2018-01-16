@@ -14,6 +14,7 @@ public class Cruiser extends Ship {
 		this.dopColor = dopColor;
 	}
 
+	@Override
 	protected void drawNormalSudno(Graphics g) {
 		super.drawNormalSudno(g);
 		if (frontCannon) {
@@ -37,4 +38,7 @@ public class Cruiser extends Ship {
 		}
 	}
 
+	public void setDopColor(Color newColor){
+		dopColor = newColor;
+	}
 }
