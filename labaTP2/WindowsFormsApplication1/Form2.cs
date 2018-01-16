@@ -63,7 +63,7 @@ namespace WindowsFormsApplication18
 					ship = new Ship(100, 4, 500, Color.White);
 					break;
 				case "Cruiser":
-					ship = new Cruiser(100, 4, 500, Color.White, true, true, Color.Black);
+					ship = new Cruiser(100, 4, 500, Color.White, true, true, Color.White);
 					break;
 			}
 			Drawship();

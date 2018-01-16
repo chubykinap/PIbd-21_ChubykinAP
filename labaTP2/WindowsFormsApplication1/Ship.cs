@@ -85,6 +85,23 @@ namespace WindowsFormsApplication18
 			startPosY = rand.Next(10, 200);
 		}
 
+        public Ship(string info)
+        {
+            string[] str = info.Split(';');
+            if (str.Length == 4)
+            {
+                maxSpeed = Convert.ToInt32(str[0]);
+                maxCrew = Convert.ToInt32(str[1]);
+                displacement = Convert.ToInt32(str[2]);
+                ColorBody1 = Color.FromName(str[3]);
+                ColorBody2 = ColorBody1;
+            }
+            CrewCount = 0;
+            Random rand = new Random();
+            startPosX = rand.Next(10, 200);
+            startPosY = rand.Next(10, 200);
+        }
+        
 		public override void moveSudno(Graphics g)
 		{
 			startPosX += (maxSpeed * 50 / ((float)displacement / 100)) / (CrewCount == 0 ? 1 : CrewCount);
@@ -126,5 +143,10 @@ namespace WindowsFormsApplication18
 			startPosX = x;
 			startPosY = y;
 		}
+
+        public override string getInfo()
+        {
+            return maxSpeed + ";" + maxCrew + ";" + displacement + ";" + ColorBody1.Name;
+        }
 	}
 }

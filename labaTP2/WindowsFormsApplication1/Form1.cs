@@ -96,5 +96,36 @@ namespace WindowsFormsApplication18
 				}
 			}
 		}
-	}
+
+        private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                if (parking.save(saveFileDialog1.FileName))
+                {
+                    MessageBox.Show("Сохранение прошло успешно.","",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Не сохранилось.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void загрузитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                if (parking.load(openFileDialog1.FileName))
+                {
+                    MessageBox.Show("Загружено.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Не загружено.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            DrawPort();
+        }
+    }
 }

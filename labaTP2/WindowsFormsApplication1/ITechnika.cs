@@ -15,5 +15,6 @@ namespace WindowsFormsApplication18
 		void loadCrew(int count);
 		int getCrew();
 		void setMainColor(Color color);
+        string getInfo();
 	}
 }

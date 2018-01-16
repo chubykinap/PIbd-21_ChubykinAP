@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -83,5 +84,110 @@ namespace WindowsFormsApplication18
 				}
 			}
 		}
+
+        public bool save(string file)
+        {
+            if (File.Exists(file))
+            {
+                File.Delete(file);
+            }
+            using (FileStream fs = new FileStream(file, FileMode.Create))
+            {
+                using (BufferedStream bs = new BufferedStream(fs))
+                {
+                    byte[] info = new UTF8Encoding(true).GetBytes("CountLevels:" + pStages.Count + Environment.NewLine);
+                    fs.Write(info, 0, info.Length);
+                    foreach (var level in pStages)
+                    {
+                        info = new UTF8Encoding(true).GetBytes("Level" + Environment.NewLine);
+                        fs.Write(info, 0, info.Length);
+                        for (int i = 0; i < countPlaces; i++)
+                        {
+                            var ship = level[i];
+                            if (ship != null)
+                            {
+                                if(ship.GetType().Name == "Ship")
+                                {
+                                    info = new UTF8Encoding(true).GetBytes("Ship:");
+                                    fs.Write(info, 0, info.Length);
+                                }
+                                if (ship.GetType().Name == "Cruiser")
+                                {
+                                    info = new UTF8Encoding(true).GetBytes("Cruiser:");
+                                    fs.Write(info, 0, info.Length);
+                                }
+                                info = new UTF8Encoding(true).GetBytes(ship.getInfo() + Environment.NewLine);
+                                fs.Write(info, 0, info.Length);
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+    public bool load(string file)
+        {
+            if (!File.Exists(file))
+            {
+                return false;
+            }
+            using (FileStream fs = new FileStream(file, FileMode.Open))
+            {
+                string str = "";
+                using (BufferedStream bs = new BufferedStream(fs))
+                {
+                    byte[] b = new byte[fs.Length];
+                    UTF8Encoding temp = new UTF8Encoding(true);
+                    while (bs.Read(b, 0, b.Length) > 0)
+                    {
+                        str += temp.GetString(b);
+                    }
+                }
+                str = str.Replace("\r", "");
+                var strs = str.Split('\n');
+                if (strs[0].Contains("CountLevels"))
+                {
+                    int count = Convert.ToInt32(strs[0].Split(':')[1]);
+                    if (pStages != null)
+                    {
+                        pStages.Clear();
+                    }
+                    pStages = new List<Port<ITechnika>>(count);
+                }
+                else
+                {
+                    return false;
+                }
+                int counter = -1;
+                for(int i = 0; i< strs.Length; i++)
+                {
+                    if(strs[i] == "Level")
+                    {
+                        counter++;
+                        pStages.Add(new Port<ITechnika>(countPlaces, null));
+                    }
+                    else if (strs[i].Split(':')[0] == "Ship")
+                    {
+                        ITechnika ship = new Ship(strs[i].Split(':')[1]);
+                        int number = pStages[counter] + ship;
+                        if (number == -1)
+                        {
+                            return false;
+                        }
+                    }
+                    else if (strs[i].Split(':')[0] == "Cruiser")
+                    {
+                        ITechnika ship = new Cruiser(strs[i].Split(':')[1]);
+                        int number = pStages[counter] + ship;
+                        if (number == -1)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
 	}
 }

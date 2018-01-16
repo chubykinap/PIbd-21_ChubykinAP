@@ -21,7 +21,24 @@ namespace WindowsFormsApplication18
 			this.dopColor = secondC;
 		}
 
-		protected override void drawNormalSudno(Graphics g)
+        public Cruiser(string info) : base(info)
+        {
+            string[] str = info.Split(';');
+            if (str.Length == 7)
+            {
+                maxSpeed = Convert.ToInt32(str[0]);
+                maxCrew = Convert.ToInt32(str[1]);
+                displacement = Convert.ToInt32(str[2]);
+                ColorBody1 = Color.FromName(str[3]);
+                ColorBody2 = ColorBody1;
+                frontCannon = Convert.ToBoolean(str[4]);
+                backCannon = Convert.ToBoolean(str[5]);
+                dopColor = Color.FromName(str[6]);
+            }
+        }
+
+
+        protected override void drawNormalSudno(Graphics g)
 		{
 			base.drawNormalSudno(g);
 			if (frontCannon)
@@ -50,6 +67,11 @@ namespace WindowsFormsApplication18
 		public void setDopColor(Color color)
 		{
 			dopColor = color;
-		}
-	}
+        }
+
+        public override string getInfo()
+        {
+            return maxSpeed + ";" + maxCrew + ";" + displacement + ";" + ColorBody1.Name + ";"  + frontCannon + ";" + backCannon + ";" + dopColor.Name;
+        }
+    }
 }
