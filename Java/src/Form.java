@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JList;
 
 public class Form {
 
@@ -22,7 +23,9 @@ public class Form {
 	private int maxCrew;
 	private int maxSpeed;
 	private int displacement;
+	private String[] levels = new String[6];
 	Parking port;
+	JList list;
 
 	/**
 	 * Launch the application.
@@ -44,8 +47,12 @@ public class Form {
 	 * Create the application.
 	 */
 	public Form() {
-		port = new Parking();
+		port = new Parking(5);
 		initialize();
+		for (int i = 0; i < 5; i++) {
+			levels[i] = "Уровнь " + (i + 1);
+		}
+		list.setSelectedIndex(port.getLvl());
 		color = Color.GRAY;
 		dopColor = Color.DARK_GRAY;
 		maxSpeed = 30;
@@ -148,5 +155,32 @@ public class Form {
 		});
 		getShip.setBounds(652, 72, 89, 23);
 		frame.getContentPane().add(getShip);
+
+		list = new JList(levels);
+		list.setBounds(652, 258, 153, 141);
+		frame.getContentPane().add(list);
+
+		JButton Up = new JButton(">>");
+		Up.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				port.LevelUp();
+				list.setSelectedIndex(port.getLvl());
+				panel.repaint();
+			}
+		});
+		Up.setBounds(815, 255, 89, 23);
+		frame.getContentPane().add(Up);
+
+		JButton Down = new JButton("<<");
+		Down.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				port.LevelDown();
+				list.setSelectedIndex(port.getLvl());
+				panel.repaint();
+
+			}
+		});
+		Down.setBounds(815, 289, 89, 23);
+		frame.getContentPane().add(Down);
 	}
 }
