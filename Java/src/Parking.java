@@ -33,23 +33,27 @@ public class Parking {
 		}
 	}
 
-	public void LevelUp() {
+	public boolean LevelUp() {
 		if (currentLVL + 1 < pStages.size()) {
 			currentLVL++;
+			return true;
 		}
+		return false;
 	}
 
-	public void LevelDown() {
+	public boolean LevelDown() {
 		if (currentLVL > 0) {
 			currentLVL--;
+			return true;
 		}
+		return false;
 	}
 
-	public int PutInParking(ITech ship) {
+	public int PutInParking(ITech ship) throws ParkingOverflowException {
 		return pStages.get(currentLVL).plus(pStages.get(currentLVL), ship);
 	}
 
-	public ITech GetInParking(int index) {
+	public ITech GetInParking(int index) throws ParkingIndexOutOfRangeException {
 		return pStages.get(currentLVL).minus(pStages.get(currentLVL), index);
 	}
 
@@ -100,7 +104,7 @@ public class Parking {
 		}
 	}
 
-	public boolean load(String filename) {
+	public boolean load(String filename) throws ParkingOverflowException {
 		File file = new File(filename);
 		if (!file.exists()) {
 			return false;
