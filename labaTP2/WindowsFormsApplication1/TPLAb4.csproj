@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ParkingAlredyHaveException.cs" />
     <Compile Include="ParkingIndexOutOfRangeException.cs" />
     <Compile Include="ParkingOverflowException.cs" />
     <Compile Include="Cruiser.cs" />

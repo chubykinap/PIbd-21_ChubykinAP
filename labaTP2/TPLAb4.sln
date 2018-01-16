@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplication18", "WindowsFormsApplication18.csproj", "{49B543EA-406B-4CBC-A1FB-BADEB95FF150}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TPlab_8", "TPlab_8.csproj", "{49B543EA-406B-4CBC-A1FB-BADEB95FF150}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

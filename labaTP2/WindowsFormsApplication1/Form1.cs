@@ -105,6 +105,10 @@ namespace WindowsFormsApplication18
                 {
                     MessageBox.Show(e.Message, "Ошибка переполнения.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                catch (ParkingAlredyHaveException e)
+                {
+                    MessageBox.Show(e.Message, "Ошибка добавления.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message, "Общая ошибка.", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -141,6 +145,11 @@ namespace WindowsFormsApplication18
                 }
             }
             DrawPort();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            parking.Sort();
         }
     }
 }
