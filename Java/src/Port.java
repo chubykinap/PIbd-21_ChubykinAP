@@ -19,9 +19,10 @@ public class Port<T> {
 		return false;
 	}
 
-	public static <T extends ITech> int plus(Port<T> p, T ship) {
+	public static <T extends ITech> int plus(Port<T> p, T ship)
+			throws ParkingOverflowException {
 		if (p.places.size() == p.maxCount) {
-			return -1;
+			throw new ParkingOverflowException();
 		}
 		for (int i = 0; i <= p.places.size(); i++) {
 			if (p.CheckFreePlaces(i)) {
@@ -32,13 +33,14 @@ public class Port<T> {
 		return -1;
 	}
 
-	public static <T extends ITech> T minus(Port<T> p, int index) {
+	public static <T extends ITech> T minus(Port<T> p, int index)
+			throws ParkingIndexOutOfRangeException {
 		if (p.places.get(index) != null) {
 			T ship = p.places.get(index);
 			p.places.remove(index);
 			return ship;
 		}
-		return p.defVal;
+		throw new ParkingIndexOutOfRangeException();
 	}
 
 	public T getShip(int index) {
