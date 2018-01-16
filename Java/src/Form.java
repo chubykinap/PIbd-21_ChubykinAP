@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
@@ -12,22 +13,16 @@ import javax.swing.JLabel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
 
 public class Form {
 
 	private JFrame frame;
-	private JPanel panel;
-	JTextArea maxSpeedArea;
-	JTextArea maxCrewArea;
-	JTextArea DispArea;
 	private Color color;
 	private Color dopColor;
 	private int maxCrew;
 	private int maxSpeed;
 	private int displacement;
-	private ITech inter;
-	Graphics g;
+	Parking port;
 
 	/**
 	 * Launch the application.
@@ -49,15 +44,13 @@ public class Form {
 	 * Create the application.
 	 */
 	public Form() {
+		port = new Parking();
 		initialize();
 		color = Color.GRAY;
-		dopColor = Color.GRAY;
+		dopColor = Color.DARK_GRAY;
 		maxSpeed = 30;
 		maxCrew = 300;
 		displacement = 9000;
-		maxSpeedArea.setText("" + maxSpeed);
-		maxCrewArea.setText("" + maxCrew);
-		DispArea.setText("" + displacement);
 	}
 
 	/**
@@ -65,99 +58,95 @@ public class Form {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 425, 607);
+		frame.setBounds(100, 100, 953, 542);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
-		maxSpeedArea = new JTextArea();
-		maxSpeedArea.setBounds(109, 452, 89, 23);
-		frame.getContentPane().add(maxSpeedArea);
+		JPanel panel = new Panel1(port);
+		panel.setBounds(10, 11, 632, 484);
+		frame.getContentPane().add(panel);
 
-		maxCrewArea = new JTextArea();
-		maxCrewArea.setBounds(109, 481, 89, 23);
-		frame.getContentPane().add(maxCrewArea);
+		JPanel panelGet = new JPanel();
+		panelGet.setBounds(652, 106, 275, 141);
+		frame.getContentPane().add(panelGet);
 
-		DispArea = new JTextArea();
-		DispArea.setBounds(109, 510, 89, 23);
-		frame.getContentPane().add(DispArea);
-
-		JCheckBox front = new JCheckBox("frontCannon");
-		front.setBounds(208, 452, 89, 23);
-		frame.getContentPane().add(front);
-
-		JCheckBox back = new JCheckBox("backCannon");
-		back.setBounds(208, 481, 89, 23);
-		frame.getContentPane().add(back);
-
-		JButton btnShip = new JButton("Ship");
+		JButton btnShip = new JButton("setShip");
 		btnShip.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (!maxSpeedArea.getText().equals("")
-						&& !maxCrewArea.getText().equals("")
-						&& !DispArea.getText().equals("")) {
-					maxSpeed = Integer.parseInt(maxSpeedArea.getText());
-					maxCrew = Integer.parseInt(maxCrewArea.getText());
-					displacement = Integer.parseInt(DispArea.getText());
-					inter = new Ship(maxSpeed, maxCrew, displacement, color);
-					panel = new Panel1(inter);
-					panel.setBounds(10, 10, 383, 401);
-					frame.getContentPane().add(panel);
-					panel.updateUI();
+				Color color = JColorChooser.showDialog(null,
+						"JColorChooser Sample", null);
+				if (color != null) {
+					ITech ship = new Ship(maxSpeed, maxCrew, displacement,
+							color);
+					int place = port.PutInParking(ship);
+					panel.repaint();
+					JOptionPane.showMessageDialog(null, "Ваше место: "
+							+ (place + 1));
 				}
 			}
 		});
-		btnShip.setBounds(10, 423, 89, 23);
+		btnShip.setBounds(652, 11, 89, 23);
 		frame.getContentPane().add(btnShip);
 
-		JButton btnCruiser = new JButton("Cruiser");
+		JButton btnCruiser = new JButton("setCruiser");
 		btnCruiser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (!maxSpeedArea.getText().equals("")
-						&& !maxCrewArea.getText().equals("")
-						&& !DispArea.getText().equals("")) {
-					maxSpeed = Integer.parseInt(maxSpeedArea.getText());
-					maxCrew = Integer.parseInt(maxCrewArea.getText());
-					displacement = Integer.parseInt(DispArea.getText());
-					inter = new Cruiser(maxSpeed, maxCrew, displacement, color,
-							front.isSelected(), back.isSelected(), dopColor);
-					panel = new Panel1(inter);
-					panel.setBounds(10, 10, 383, 401);
-					frame.getContentPane().add(panel);
-					panel.updateUI();
+				color = JColorChooser.showDialog(null, "JColorChooser Sample",
+						null);
+				dopColor = JColorChooser.showDialog(null,
+						"JColorChooser Sample", null);
+				if (color != null && dopColor != null) {
+					ITech ship = new Cruiser(maxSpeed, maxCrew, displacement,
+							color, true, true, dopColor);
+					int place = port.PutInParking(ship);
+					panel.repaint();
+					JOptionPane.showMessageDialog(null, "Ваше место: "
+							+ (place + 1));
 				}
 			}
 		});
-		btnCruiser.setBounds(109, 423, 89, 23);
+		btnCruiser.setBounds(751, 11, 89, 23);
 		frame.getContentPane().add(btnCruiser);
 
-		JButton btnColor = new JButton("color");
-		btnColor.addActionListener(new ActionListener() {
+		JTextArea placeArea = new JTextArea();
+		placeArea.setBounds(707, 45, 71, 16);
+		frame.getContentPane().add(placeArea);
+
+		JLabel lblPlace = new JLabel("Place");
+		lblPlace.setBounds(651, 45, 46, 14);
+		frame.getContentPane().add(lblPlace);
+
+		JButton getShip = new JButton("GetShip");
+		getShip.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				color = JColorChooser.showDialog(btnColor, "", color);
+				int place;
+				ITech ship;
+				try {
+					place = Integer.parseInt(placeArea.getText()) - 1;
+					if (place > 15 && place < 1) {
+						JOptionPane.showMessageDialog(null,
+								"Введено неверное число", "Ошибка", 0, null);
+						return;
+					}
+					ship = port.GetInParking(place);
+					ship.setPos(50, 50);
+				} catch (NumberFormatException e) {
+					JOptionPane.showMessageDialog(null, "Неверный формат",
+							"Ошибка", 0, null);
+					return;
+				} catch (NullPointerException e) {
+					JOptionPane.showMessageDialog(null, "Пусто", "Ошибка", 0,
+							null);
+					return;
+				}
+				Graphics g = panelGet.getGraphics();
+				g.setColor(Color.BLACK);
+				g.drawRect(20, 20, 200, 100);
+				ship.drawSudno(g);
+				panel.repaint();
 			}
 		});
-		btnColor.setBounds(307, 423, 89, 23);
-		frame.getContentPane().add(btnColor);
-
-		JButton btnDopcolor = new JButton("dopColor");
-		btnDopcolor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				dopColor = JColorChooser.showDialog(btnDopcolor, "", dopColor);
-			}
-		});
-		btnDopcolor.setBounds(307, 452, 89, 23);
-		frame.getContentPane().add(btnDopcolor);
-
-		JLabel lblMaxspeed = new JLabel("maxSpeed");
-		lblMaxspeed.setBounds(10, 457, 69, 14);
-		frame.getContentPane().add(lblMaxspeed);
-
-		JLabel lblMaxcrew = new JLabel("maxCrew");
-		lblMaxcrew.setBounds(10, 485, 69, 14);
-		frame.getContentPane().add(lblMaxcrew);
-
-		JLabel lblDisplacement = new JLabel("displacement");
-		lblDisplacement.setBounds(10, 510, 69, 14);
-		frame.getContentPane().add(lblDisplacement);
+		getShip.setBounds(652, 72, 89, 23);
+		frame.getContentPane().add(getShip);
 	}
 }
