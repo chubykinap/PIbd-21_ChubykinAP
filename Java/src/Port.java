@@ -1,29 +1,25 @@
+import java.util.Dictionary;
+import java.util.Hashtable;
+
 public class Port<T> {
-	private T[] places;
+	private Dictionary<Integer, T> places;
+	private int maxCount;
 	private T defVal;
 
-	private int GetCountPlaces() {
-		return places.length;
-	}
-
 	private boolean CheckFreePlaces(int index) {
-		if (index < 0 || index > places.length) {
-			return false;
-		}
-		if (places[index] == null) {
+		if (places.get(index) == null) {
 			return true;
 		}
 		return false;
 	}
 
-	private void AddShip(int index, T ship) {
-		places[index] = ship;
-	}
-
 	public static <T extends ITech> int plus(Port<T> p, T ship) {
-		for (int i = 0; i < p.GetCountPlaces(); i++) {
+		if (p.places.size() == p.maxCount) {
+			return -1;
+		}
+		for (int i = 0; i <= p.places.size(); i++) {
 			if (p.CheckFreePlaces(i)) {
-				p.AddShip(i, ship);
+				p.places.put(i, ship);
 				return i;
 			}
 		}
@@ -31,9 +27,9 @@ public class Port<T> {
 	}
 
 	public static <T extends ITech> T minus(Port<T> p, int index) {
-		if (!p.CheckFreePlaces(index)) {
-			T ship = p.places[index];
-			p.places[index] = p.defVal;
+		if (p.places.get(index) != null) {
+			T ship = p.places.get(index);
+			p.places.remove(index);
 			return ship;
 		}
 		return p.defVal;
@@ -41,15 +37,13 @@ public class Port<T> {
 
 	public Port(int size, T defValue) {
 		defVal = defValue;
-		places = (T[]) new ITech[size];
-		for (int i = 0; i < places.length; i++) {
-			places[i] = defVal;
-		}
+		places = new Hashtable<Integer, T>();
+		maxCount = size;
 	}
 
 	public T getShip(int index) {
-		if (index > -1 && index < GetCountPlaces()) {
-			return places[index];
+		if (places.get(index) != null) {
+			return places.get(index);
 		} else {
 			return defVal;
 		}

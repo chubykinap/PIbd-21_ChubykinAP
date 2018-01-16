@@ -1,8 +1,9 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 public class Parking {
-	Port<ITech> parking;
+	ArrayList<Port<ITech>> pStages;
 	int countPlaces = 15;
 	int placeSizeWidth = 210;
 	int placeSizeHeight = 80;
@@ -12,16 +13,31 @@ public class Parking {
 		return currentLVL;
 	}
 
-	public Parking() {
-		parking = new Port<ITech>(countPlaces, null);
+	public Parking(int countStages) {
+		pStages = new ArrayList<Port<ITech>>(countStages);
+		for (int i = 0; i < countStages; i++) {
+			pStages.add(new Port<ITech>(countPlaces, null));
+		}
+	}
+
+	public void LevelUp() {
+		if (currentLVL + 1 < pStages.size()) {
+			currentLVL++;
+		}
+	}
+
+	public void LevelDown() {
+		if (currentLVL > 0) {
+			currentLVL--;
+		}
 	}
 
 	public int PutInParking(ITech ship) {
-		return parking.plus(parking, ship);
+		return pStages.get(currentLVL).plus(pStages.get(currentLVL), ship);
 	}
 
 	public ITech GetInParking(int index) {
-		return parking.minus(parking, index);
+		return pStages.get(currentLVL).minus(pStages.get(currentLVL), index);
 	}
 
 	public void DrawPort(Graphics g) {
@@ -39,7 +55,7 @@ public class Parking {
 	public void Draw(Graphics g) {
 		DrawPort(g);
 		for (int i = 0; i < countPlaces; i++) {
-			ITech ship = parking.getShip(i);
+			ITech ship = pStages.get(currentLVL).getShip(i);
 			if (ship != null) {
 				ship.setPos(20 + i / 5 * placeSizeWidth, i % 5
 						* placeSizeHeight + 15);
