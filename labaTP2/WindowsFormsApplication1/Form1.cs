@@ -10,85 +10,110 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApplication1
 {
-	public partial class Form : System.Windows.Forms.Form
-	{
-		Port<ITechnika> port;
+    public partial class Form : System.Windows.Forms.Form
+    {
+        Parking parking;
 
-		public Form()
-		{
-			InitializeComponent();
-			port = new Port<ITechnika>(25, null);
-			DrawPort();
-		}
+        public Form()
+        {
+            InitializeComponent();
+            parking = new Parking(5);
+            for (int i = 1; i < 6; i++)
+            {
+                listBox1.Items.Add("Порт №" + i);
+            }
+            listBox1.SelectedIndex = parking.getLVL;
+            DrawPort();
+        }
 
-		private void DrawPort()
-		{
-			Bitmap bmp = new Bitmap(picture.Width, picture.Height);
-			Graphics gr = Graphics.FromImage(bmp);
-			port.Draw(gr, picture.Width, picture.Height);
-			picture.Image = bmp;
-		}
+        private void DrawPort()
+        {
+            if (listBox1.SelectedIndex > -1)
+            {
+                Bitmap bmp = new Bitmap(picture.Width, picture.Height);
+                Graphics gr = Graphics.FromImage(bmp);
+                parking.Draw(gr);
+                picture.Image = bmp;
+            }
+        }
 
-		private void button1_Click(object sender, EventArgs e)
-		{
-			ColorDialog dialog = new ColorDialog();
-			if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-			{
-				ColorDialog dialogDop = new ColorDialog();
-				if (dialogDop.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-				{
-					var ship = new Ship(30, 300, 9000, dialog.Color, dialogDop.Color);
-					int place = port + ship;
-					DrawPort();
-					MessageBox.Show("Вашеместо: " + place);
-				}
-			}
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ColorDialog dialog = new ColorDialog();
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                ColorDialog dialogDop = new ColorDialog();
+                if (dialogDop.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    var ship = new Ship(30, 300, 9000, dialog.Color, dialogDop.Color);
+                    int place = parking.PutInParking(ship);
+                    DrawPort();
+                    MessageBox.Show("Ваше место: " + (place + 1));
+                }
+            }
 
-		}
+        }
 
-		private void button2_Click(object sender, EventArgs e)
-		{
-			ColorDialog dialog = new ColorDialog();
-			if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-			{
-				ColorDialog dialogDop = new ColorDialog();
-				if (dialogDop.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-				{
-					ColorDialog dialogDopp = new ColorDialog();
-					if (dialogDopp.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-					{
-						var ship = new Cruiser(30, 300, 9000, dialog.Color, true, true, dialogDop.Color, dialogDopp.Color);
-						int place = port + ship;
-						DrawPort();
-						MessageBox.Show("Вашеместо: " + place);
-					}
-				}
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ColorDialog dialog = new ColorDialog();
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                ColorDialog dialogDop = new ColorDialog();
+                if (dialogDop.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    ColorDialog dialogDopp = new ColorDialog();
+                    if (dialogDopp.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        var ship = new Cruiser(30, 300, 9000, dialog.Color, true, true, dialogDop.Color, dialogDopp.Color);
+                        int place = parking.PutInParking(ship);
+                        DrawPort();
+                        MessageBox.Show("Ваше место: " + (place + 1));
+                    }
+                }
 
-			}
-		}
+            }
+        }
 
-		private void button3_Click(object sender, EventArgs e)
-		{
-			if (maskedTextBox1.Text != "")
-			{
-				ITechnika ship = port - Convert.ToInt32(maskedTextBox1.Text);
-				if (ship != null)
-				{
-					Bitmap bmp = new Bitmap(pictureTake.Width, pictureTake.Height);
-					Graphics gr = Graphics.FromImage(bmp);
-					ship.setPos(15, 10);
-					ship.drawSudno(gr);
-					pictureTake.Image = bmp;
-					DrawPort();
-				}
-				else
-				{
-					MessageBox.Show("Здесь пусто");
-				}
-			}
-		}
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string LVL = listBox1.Items[listBox1.SelectedIndex].ToString();
+            if (maskedTextBox1.Text != "")
+            {
+                ITechnika ship = parking.GetInParking(Convert.ToInt32(maskedTextBox1.Text) - 1);
+                if (ship != null)
+                {
+                    Bitmap bmp = new Bitmap(pictureTake.Width, pictureTake.Height);
+                    Graphics gr = Graphics.FromImage(bmp);
+                    ship.setPos(15, 10);
+                    ship.drawSudno(gr);
+                    pictureTake.Image = bmp;
+                    DrawPort();
+                }
+                else
+                {
+                    MessageBox.Show("Здесь пусто");
+                }
+            }
+        }
 
-		private void groupBox1_Enter(object sender, EventArgs e)
-		{ }
-	}
+        private void button4_Click(object sender, EventArgs e)
+        {
+            parking.LevelUp();
+            listBox1.SelectedIndex = parking.getLVL;
+            DrawPort();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            parking.LevelDown();
+            listBox1.SelectedIndex = parking.getLVL;
+            DrawPort();
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        { }
+        private void label1_Click(object sender, EventArgs e)
+        { }
+    }
 }

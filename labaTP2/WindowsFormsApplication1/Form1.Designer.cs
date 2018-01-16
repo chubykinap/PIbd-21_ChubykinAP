@@ -36,6 +36,10 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.pictureTake = new System.Windows.Forms.PictureBox();
             this.button3 = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureTake)).BeginInit();
@@ -43,7 +47,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(682, 12);
+            this.button1.Location = new System.Drawing.Point(647, 6);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(113, 38);
             this.button1.TabIndex = 13;
@@ -53,7 +57,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(682, 65);
+            this.button2.Location = new System.Drawing.Point(647, 50);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(113, 42);
             this.button2.TabIndex = 14;
@@ -66,7 +70,7 @@
             this.picture.Dock = System.Windows.Forms.DockStyle.Left;
             this.picture.Location = new System.Drawing.Point(0, 0);
             this.picture.Name = "picture";
-            this.picture.Size = new System.Drawing.Size(676, 510);
+            this.picture.Size = new System.Drawing.Size(641, 489);
             this.picture.TabIndex = 0;
             this.picture.TabStop = false;
             // 
@@ -93,9 +97,9 @@
             this.groupBox1.Controls.Add(this.button3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.maskedTextBox1);
-            this.groupBox1.Location = new System.Drawing.Point(682, 113);
+            this.groupBox1.Location = new System.Drawing.Point(647, 98);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(235, 212);
+            this.groupBox1.Size = new System.Drawing.Size(213, 171);
             this.groupBox1.TabIndex = 18;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Вывести корабль";
@@ -105,7 +109,7 @@
             // 
             this.pictureTake.Location = new System.Drawing.Point(6, 79);
             this.pictureTake.Name = "pictureTake";
-            this.pictureTake.Size = new System.Drawing.Size(223, 119);
+            this.pictureTake.Size = new System.Drawing.Size(201, 81);
             this.pictureTake.TabIndex = 19;
             this.pictureTake.TabStop = false;
             // 
@@ -119,11 +123,53 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(647, 289);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(120, 95);
+            this.listBox1.TabIndex = 19;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(650, 273);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(40, 13);
+            this.label1.TabIndex = 20;
+            this.label1.Text = "Порты";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(773, 289);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(76, 32);
+            this.button4.TabIndex = 21;
+            this.button4.Text = ">>";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(773, 327);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(76, 32);
+            this.button5.TabIndex = 22;
+            this.button5.Text = "<<";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(929, 510);
+            this.ClientSize = new System.Drawing.Size(866, 489);
+            this.Controls.Add(this.button5);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -135,6 +181,7 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureTake)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -147,6 +194,10 @@
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.PictureBox pictureTake;
 		private System.Windows.Forms.Button button3;
-	}
+        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button5;
+    }
 }
 
