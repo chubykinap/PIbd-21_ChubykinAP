@@ -45,7 +45,7 @@ namespace WindowsFormsApplication18
 		{
 			if (p.places.Count == p.maxCount)
 			{
-				return -1;
+                throw new ParkingOverflowException();
 			}
 			for (int i = 0; i < p.places.Count; i++)
 			{
@@ -67,7 +67,7 @@ namespace WindowsFormsApplication18
 				p.places.Remove(index);
 				return ship;
 			}
-			return p.defValue;
+            throw new ParkingIndexOutOfRangeException();
 		}
 
 		public Port(int size, T defVal)
