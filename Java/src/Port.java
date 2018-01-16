@@ -6,6 +6,12 @@ public class Port<T> {
 	private int maxCount;
 	private T defVal;
 
+	public Port(int size, T defValue) {
+		defVal = defValue;
+		places = new Hashtable<Integer, T>();
+		maxCount = size;
+	}
+
 	private boolean CheckFreePlaces(int index) {
 		if (places.get(index) == null) {
 			return true;
@@ -33,12 +39,6 @@ public class Port<T> {
 			return ship;
 		}
 		return p.defVal;
-	}
-
-	public Port(int size, T defValue) {
-		defVal = defValue;
-		places = new Hashtable<Integer, T>();
-		maxCount = size;
 	}
 
 	public T getShip(int index) {

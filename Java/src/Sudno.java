@@ -14,6 +14,7 @@ public abstract class Sudno implements ITech {
 
 	public abstract void drawSudno(Graphics g);
 
+	@Override
 	public void setPos(int x, int y) {
 		startX = x;
 		startY = y;

@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JList;
 
 public class Form {
@@ -77,44 +78,6 @@ public class Form {
 		panelGet.setBounds(652, 106, 275, 141);
 		frame.getContentPane().add(panelGet);
 
-		JButton btnShip = new JButton("setShip");
-		btnShip.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				Color color = JColorChooser.showDialog(null,
-						"JColorChooser Sample", null);
-				if (color != null) {
-					ITech ship = new Ship(maxSpeed, maxCrew, displacement,
-							color);
-					int place = port.PutInParking(ship);
-					panel.repaint();
-					JOptionPane.showMessageDialog(null, "Ваше место: "
-							+ (place + 1));
-				}
-			}
-		});
-		btnShip.setBounds(652, 11, 89, 23);
-		frame.getContentPane().add(btnShip);
-
-		JButton btnCruiser = new JButton("setCruiser");
-		btnCruiser.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				color = JColorChooser.showDialog(null, "JColorChooser Sample",
-						null);
-				dopColor = JColorChooser.showDialog(null,
-						"JColorChooser Sample", null);
-				if (color != null && dopColor != null) {
-					ITech ship = new Cruiser(maxSpeed, maxCrew, displacement,
-							color, true, true, dopColor);
-					int place = port.PutInParking(ship);
-					panel.repaint();
-					JOptionPane.showMessageDialog(null, "Ваше место: "
-							+ (place + 1));
-				}
-			}
-		});
-		btnCruiser.setBounds(751, 11, 89, 23);
-		frame.getContentPane().add(btnCruiser);
-
 		JTextArea placeArea = new JTextArea();
 		placeArea.setBounds(707, 45, 71, 16);
 		frame.getContentPane().add(placeArea);
@@ -156,6 +119,22 @@ public class Form {
 		getShip.setBounds(652, 72, 89, 23);
 		frame.getContentPane().add(getShip);
 
+		JButton setShip = new JButton("setShip");
+		setShip.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				formSelect form = new formSelect(frame);
+				if (form.checkExist()) {
+					ITech ship = form.returnShip();
+					int place = port.PutInParking(ship);
+					panel.repaint();
+					JOptionPane.showMessageDialog(null, "Ваше место :"
+							+ (place + 1));
+				}
+			}
+		});
+		setShip.setBounds(652, 11, 89, 23);
+		frame.getContentPane().add(setShip);
+
 		list = new JList(levels);
 		list.setBounds(652, 258, 153, 141);
 		frame.getContentPane().add(list);
@@ -177,7 +156,6 @@ public class Form {
 				port.LevelDown();
 				list.setSelectedIndex(port.getLvl());
 				panel.repaint();
-
 			}
 		});
 		Down.setBounds(815, 289, 89, 23);

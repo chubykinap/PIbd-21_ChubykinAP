@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 
 public interface ITech {
@@ -6,4 +7,6 @@ public interface ITech {
 	void drawSudno(Graphics g);
 
 	void setPos(int x, int y);
+
+	void setMainColor(Color color);
 }
