@@ -9,4 +9,6 @@ public interface ITech {
 	void setPos(int x, int y);
 
 	void setMainColor(Color color);
+	
+	String getInfo();
 }

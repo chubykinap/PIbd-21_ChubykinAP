@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Random;
 
 public class Cruiser extends Ship {
 	private boolean frontCannon;
@@ -12,6 +13,26 @@ public class Cruiser extends Ship {
 		this.frontCannon = fronCannon;
 		this.backCannon = backCannon;
 		this.dopColor = dopColor;
+	}
+
+	public Cruiser(String info) {
+		super(info);
+		String[] str = info.split(";");
+		if (str.length == 11) {
+			maxSpeed = Integer.parseInt(str[0]);
+			maxCrew = Integer.parseInt(str[1]);
+			displacement = Integer.parseInt(str[2]);
+			color = new Color(Integer.parseInt(str[3]),
+					Integer.parseInt(str[4]), Integer.parseInt(str[5]));
+			frontCannon = Boolean.parseBoolean(str[6]);
+			backCannon = Boolean.parseBoolean(str[7]);
+			dopColor = new Color(Integer.parseInt(str[8]),
+					Integer.parseInt(str[9]), Integer.parseInt(str[10]));
+		}
+		CrewCount = 0;
+		Random rand = new Random();
+		startX = rand.nextInt(190) + 10;
+		startY = rand.nextInt(190) + 10;
 	}
 
 	@Override
@@ -38,7 +59,16 @@ public class Cruiser extends Ship {
 		}
 	}
 
-	public void setDopColor(Color newColor){
+	public void setDopColor(Color newColor) {
 		dopColor = newColor;
+	}
+
+	@Override
+	public String getInfo() {
+		return maxSpeed + ";" + maxCrew + ";" + displacement + ";"
+				+ color.getRed() + ";" + color.getGreen() + ";"
+				+ color.getBlue() + ";" + frontCannon + ";" + backCannon + ";"
+				+ dopColor.getRed() + ";" + dopColor.getGreen() + ";"
+				+ dopColor.getBlue();
 	}
 }

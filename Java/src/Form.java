@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -13,8 +14,13 @@ import javax.swing.JLabel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.File;
 
 import javax.swing.JList;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JMenu;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Form {
 
@@ -48,13 +54,12 @@ public class Form {
 	 * Create the application.
 	 */
 	public Form() {
-		port = new Parking(5);
+		port = new Parking();
 		initialize();
 		for (int i = 0; i < 5; i++) {
-			levels[i] = "Уровнь " + (i + 1);
+			levels[i] = "Level " + (i + 1);
 		}
 		list.setSelectedIndex(port.getLvl());
-		color = Color.GRAY;
 		dopColor = Color.DARK_GRAY;
 		maxSpeed = 30;
 		maxCrew = 300;
@@ -66,13 +71,68 @@ public class Form {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 953, 542);
+		frame.setBounds(100, 100, 953, 565);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+
+		JMenuBar menuBar = new JMenuBar();
+		frame.setJMenuBar(menuBar);
+
+		JMenu menuFile = new JMenu("File");
+		menuBar.add(menuFile);
 
 		JPanel panel = new Panel1(port);
 		panel.setBounds(10, 11, 632, 484);
 		frame.getContentPane().add(panel);
+
+		JMenuItem menuSave = new JMenuItem("Save");
+		menuSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser filesave = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+						"txt file", "txt");
+				filesave.setFileFilter(filter);
+				if (filesave.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File file = filesave.getSelectedFile();
+					String path = file.getAbsolutePath();
+					if (port.save(path)) {
+						JOptionPane.showMessageDialog(null, "Saved");
+						return;
+					} else {
+						JOptionPane.showMessageDialog(null, "Save failed", "",
+								0, null);
+					}
+				}
+			}
+		});
+		menuFile.add(menuSave);
+
+		JMenuItem menuLoad = new JMenuItem("Load");
+		menuLoad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fileChooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+						"txt file", "txt");
+				fileChooser.setFileFilter(filter);
+				if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File file = fileChooser.getSelectedFile();
+					try {
+						if (port.load(file.getAbsolutePath())) {
+							JOptionPane.showMessageDialog(null, "Loaded");
+						} else {
+							JOptionPane.showMessageDialog(null, "Load failed",
+									"", 0, null);
+						}
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(null, ex.getMessage(),
+								"", 0, null);
+					}
+					panel.repaint();
+				}
+			}
+		});
+		menuFile.add(menuLoad);
+		color = Color.GRAY;
 
 		JPanel panelGet = new JPanel();
 		panelGet.setBounds(652, 106, 275, 141);
@@ -95,17 +155,17 @@ public class Form {
 					place = Integer.parseInt(placeArea.getText()) - 1;
 					if (place > 15 && place < 1) {
 						JOptionPane.showMessageDialog(null,
-								"Введено неверное число", "Ошибка", 0, null);
+								"Wrong number", "Error", 0, null);
 						return;
 					}
 					ship = port.GetInParking(place);
 					ship.setPos(50, 50);
 				} catch (NumberFormatException e) {
-					JOptionPane.showMessageDialog(null, "Неверный формат",
-							"Ошибка", 0, null);
+					JOptionPane.showMessageDialog(null, "Wrong format",
+							"Error", 0, null);
 					return;
 				} catch (NullPointerException e) {
-					JOptionPane.showMessageDialog(null, "Пусто", "Ошибка", 0,
+					JOptionPane.showMessageDialog(null, "Empty", "Error", 0,
 							null);
 					return;
 				}
@@ -125,9 +185,14 @@ public class Form {
 				formSelect form = new formSelect(frame);
 				if (form.checkExist()) {
 					ITech ship = form.returnShip();
+					if (ship == null) {
+						JOptionPane.showMessageDialog(null, "Null element",
+								"Error", 0, null);
+						return;
+					}
 					int place = port.PutInParking(ship);
 					panel.repaint();
-					JOptionPane.showMessageDialog(null, "Ваше место :"
+					JOptionPane.showMessageDialog(null, "Your place : "
 							+ (place + 1));
 				}
 			}

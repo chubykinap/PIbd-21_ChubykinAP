@@ -16,6 +16,21 @@ public class Ship extends Sudno {
 		startY = rand.nextInt(190) + 10;
 	}
 
+	public Ship(String info) {
+		String[] str = info.split(";");
+		if (str.length == 6) {
+			maxSpeed = Integer.parseInt(str[0]);
+			maxCrew = Integer.parseInt(str[1]);
+			displacement = Integer.parseInt(str[2]);
+			color = new Color(Integer.parseInt(str[3]),
+					Integer.parseInt(str[4]), Integer.parseInt(str[5]));
+		}
+		CrewCount = 0;
+		Random rand = new Random();
+		startX = rand.nextInt(190) + 10;
+		startY = rand.nextInt(190) + 10;
+	}
+
 	protected void setMaxSpeed(int value) {
 		if (value > 0 && value < 40) {
 			super.maxSpeed = value;
@@ -97,5 +112,12 @@ public class Ship extends Sudno {
 	@Override
 	public void setMainColor(Color newColor) {
 		color = newColor;
+	}
+
+	@Override
+	public String getInfo() {
+		return maxSpeed + ";" + maxCrew + ";" + displacement + ";"
+				+ color.getRed() + ";" + color.getGreen() + ";"
+				+ color.getBlue();
 	}
 }
