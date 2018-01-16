@@ -5,14 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WindowsFormsApplication1
+namespace WindowsFormsApplication18
 {
-    interface ITechnika
-    {
-        void moveSudno(Graphics g);
-        void drawSudno(Graphics g);
-        void setPos(int x, int y);
-        void loadCrew(int count);
-        int getCrew();
-    }
+	public interface ITechnika
+	{
+		void moveSudno(Graphics g);
+		void drawSudno(Graphics g);
+		void setPos(int x, int y);
+		void loadCrew(int count);
+		int getCrew();
+		void setMainColor(Color color);
+	}
 }
