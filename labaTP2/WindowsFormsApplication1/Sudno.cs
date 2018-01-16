@@ -19,5 +19,26 @@ namespace WindowsFormsApplication1
         public virtual double displacement { protected set; get; }
         public abstract void moveSudno(Graphics g);
         public abstract void drawSudno(Graphics g);
+
+        public virtual void setPos(int x,int y)
+        {
+            startPosX = x;
+            startPosY = y;
+        }
+
+        public void loadCrew(int count)
+        {
+            if(CrewCount + count < maxCrew)
+            {
+                CrewCount += count;
+            }
+        }
+
+        public int getCrew()
+        {
+            int count = CrewCount;
+            CrewCount = 0;
+            return count;
+        }
     }
 }
