@@ -74,7 +74,6 @@ public class Form {
 			levels[i] = "Level " + (i + 1);
 		}
 		list.setSelectedIndex(port.getLvl());
-		dopColor = Color.DARK_GRAY;
 		maxSpeed = 30;
 		maxCrew = 300;
 		displacement = 9000;
@@ -151,6 +150,17 @@ public class Form {
 		menuFile.add(menuLoad);
 		color = Color.GRAY;
 
+		JButton btnSort = new JButton("Sort");
+		btnSort.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				port.Sort();
+				panel.repaint();
+			}
+		});
+		btnSort.setBounds(815, 11, 89, 23);
+		frame.getContentPane().add(btnSort);
+		dopColor = Color.DARK_GRAY;
+
 		JPanel panelGet = new JPanel();
 		panelGet.setBounds(652, 106, 275, 141);
 		frame.getContentPane().add(panelGet);
@@ -210,12 +220,18 @@ public class Form {
 						}
 						int place = port.PutInParking(ship);
 						panel.repaint();
-						log.log(Level.INFO, "Added new ship. Its place "
-								+ (place + 1));
+						log.log(Level.INFO,
+								"Added new ship to port ¹"
+										+ (port.getLvl() + 1) + ". Its place "
+										+ (place + 1));
 						JOptionPane.showMessageDialog(null, "Your place : "
 								+ (place + 1));
 					}
 				} catch (ParkingOverflowException e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(),
+							"Error", 0, null);
+					return;
+				} catch (ParkingAlreadyHaveException e) {
 					JOptionPane.showMessageDialog(null, e.getMessage(),
 							"Error", 0, null);
 					return;

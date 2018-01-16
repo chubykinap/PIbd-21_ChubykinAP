@@ -49,7 +49,8 @@ public class Parking {
 		return false;
 	}
 
-	public int PutInParking(ITech ship) throws ParkingOverflowException {
+	public int PutInParking(ITech ship) throws ParkingOverflowException,
+			ParkingAlreadyHaveException {
 		return pStages.get(currentLVL).plus(pStages.get(currentLVL), ship);
 	}
 
@@ -104,7 +105,8 @@ public class Parking {
 		}
 	}
 
-	public boolean load(String filename) throws ParkingOverflowException {
+	public boolean load(String filename) throws ParkingOverflowException,
+			ParkingAlreadyHaveException {
 		File file = new File(filename);
 		if (!file.exists()) {
 			return false;
@@ -172,13 +174,16 @@ public class Parking {
 
 	public void Draw(Graphics g) {
 		DrawPort(g);
-		for (int i = 0; i < countPlaces; i++) {
-			ITech ship = pStages.get(currentLVL).getShip(i);
-			if (ship != null) {
-				ship.setPos(20 + i / 5 * placeSizeWidth, i % 5
-						* placeSizeHeight + 15);
-				ship.drawSudno(g);
-			}
+		int i = 0;
+		for (ITech ship : pStages.get(currentLVL)) {
+			ship.setPos(20 + i / 5 * placeSizeWidth, i % 5 * placeSizeHeight
+					+ 15);
+			ship.drawSudno(g);
+			i++;
 		}
+	}
+
+	public void Sort() {
+		pStages.sort(null);
 	}
 }
