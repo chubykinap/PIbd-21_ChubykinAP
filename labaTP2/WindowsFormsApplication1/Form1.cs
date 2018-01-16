@@ -12,108 +12,83 @@ namespace WindowsFormsApplication1
 {
 	public partial class Form : System.Windows.Forms.Form
 	{
-		Color color;
-		Color dopColor;
-		Color colorDop;
-		int maxSpeed;
-		int maxCrew;
-		int displacement;
-
-		private ITechnika inter;
+		Port<ITechnika> port;
 
 		public Form()
 		{
 			InitializeComponent();
-			color = Color.Gray;
-			colorDop = Color.DarkGray;
-			dopColor = Color.Gray;
-			maxSpeed = 30;
-			maxCrew = 300;
-			displacement = 9000;
-			button3.BackColor = color;
-			button4.BackColor = dopColor;
-			speed.Text = Convert.ToString(maxSpeed);
-			disp.Text = Convert.ToString(displacement);
-			crew.Text = Convert.ToString(maxCrew);
+			port = new Port<ITechnika>(25, null);
+			DrawPort();
+		}
+
+		private void DrawPort()
+		{
+			Bitmap bmp = new Bitmap(picture.Width, picture.Height);
+			Graphics gr = Graphics.FromImage(bmp);
+			port.Draw(gr, picture.Width, picture.Height);
+			picture.Image = bmp;
 		}
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			inter = new Ship(maxSpeed, maxCrew, displacement, color, colorDop);
-			Bitmap bmp = new Bitmap(picture.Width, picture.Height);
-			Graphics gr = Graphics.FromImage(bmp);
-			inter.drawSudno(gr);
-			picture.Image = bmp;
+			ColorDialog dialog = new ColorDialog();
+			if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			{
+				ColorDialog dialogDop = new ColorDialog();
+				if (dialogDop.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+				{
+					var ship = new Ship(30, 300, 9000, dialog.Color, dialogDop.Color);
+					int place = port + ship;
+					DrawPort();
+					MessageBox.Show("Вашеместо: " + place);
+				}
+			}
+
 		}
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			if (checkFields())
+			ColorDialog dialog = new ColorDialog();
+			if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
-				inter = new Cruiser(maxSpeed, maxCrew, displacement, color, box1.Checked, box2.Checked, dopColor, colorDop);
-				Bitmap bmp = new Bitmap(picture.Width, picture.Height);
-				Graphics gr = Graphics.FromImage(bmp);
-				inter.drawSudno(gr);
-				picture.Image = bmp;
+				ColorDialog dialogDop = new ColorDialog();
+				if (dialogDop.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+				{
+					ColorDialog dialogDopp = new ColorDialog();
+					if (dialogDopp.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+					{
+						var ship = new Cruiser(30, 300, 9000, dialog.Color, true, true, dialogDop.Color, dialogDopp.Color);
+						int place = port + ship;
+						DrawPort();
+						MessageBox.Show("Вашеместо: " + place);
+					}
+				}
+
 			}
 		}
 
 		private void button3_Click(object sender, EventArgs e)
 		{
-			ColorDialog cd = new ColorDialog();
-			if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			if (maskedTextBox1.Text != "")
 			{
-				color = cd.Color;
-				button3.BackColor = color;
+				ITechnika ship = port - Convert.ToInt32(maskedTextBox1.Text);
+				if (ship != null)
+				{
+					Bitmap bmp = new Bitmap(pictureTake.Width, pictureTake.Height);
+					Graphics gr = Graphics.FromImage(bmp);
+					ship.setPos(15, 10);
+					ship.drawSudno(gr);
+					pictureTake.Image = bmp;
+					DrawPort();
+				}
+				else
+				{
+					MessageBox.Show("Здесь пусто");
+				}
 			}
 		}
 
-		private void button4_Click(object sender, EventArgs e)
-		{
-			ColorDialog cd = new ColorDialog();
-			if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-			{
-				dopColor = cd.Color;
-				button4.BackColor = dopColor;
-			}
-		}
-
-		private bool checkFields()
-		{
-			if (!int.TryParse(speed.Text, out maxSpeed))
-			{
-				return false;
-			}
-			if (!int.TryParse(disp.Text, out displacement))
-			{
-				return false;
-			}
-			if (!int.TryParse(crew.Text, out maxCrew))
-			{
-				return false;
-			}
-			return true;
-		}
-
-		private void move_Click(object sender, EventArgs e)
-		{
-			if (inter != null)
-			{
-				Bitmap bmp = new Bitmap(picture.Width, picture.Height);
-				Graphics gr = Graphics.FromImage(bmp);
-				inter.moveSudno(gr);
-				picture.Image = bmp;
-			}
-		}
-
-		private void button5_Click(object sender, EventArgs e)
-		{
-			ColorDialog cd = new ColorDialog();
-			if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-			{
-				colorDop = cd.Color;
-				button5.BackColor = colorDop;
-			}
-		}
+		private void groupBox1_Enter(object sender, EventArgs e)
+		{ }
 	}
 }

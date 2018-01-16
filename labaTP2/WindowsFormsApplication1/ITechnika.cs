@@ -11,5 +11,8 @@ namespace WindowsFormsApplication1
     {
         void moveSudno(Graphics g);
         void drawSudno(Graphics g);
+        void setPos(int x, int y);
+        void loadCrew(int count);
+        int getCrew();
     }
 }

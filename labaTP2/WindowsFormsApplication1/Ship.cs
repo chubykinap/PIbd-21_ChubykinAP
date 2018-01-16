@@ -9,6 +9,9 @@ namespace WindowsFormsApplication1
 {
     public class Ship : Sudno
     {
+		protected float startPosX;
+		protected float startPosY;
+
         public override int maxSpeed
         {
             get
@@ -117,5 +120,11 @@ namespace WindowsFormsApplication1
             g.DrawEllipse(pen, startPosX + 45, startPosY + 15, 10, 10);
             g.DrawRectangle(pen, startPosX + 30, startPosY + 5, 45, 30);
         }
+
+		public override void setPos(int x, int y)
+		{
+			startPosX = x;
+			startPosY = y;
+		}
     }
 }
