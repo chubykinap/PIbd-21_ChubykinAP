@@ -46,5 +46,10 @@ namespace WindowsFormsApplication18
 			ColorBody1 = color;
 			ColorBody2 = color;
 		}
+
+        public virtual string getInfo()
+        {
+            return "";
+        }
 	}
 }
