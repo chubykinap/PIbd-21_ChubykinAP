@@ -33,23 +33,28 @@ public class Parking {
 		}
 	}
 
-	public void LevelUp() {
+	public boolean LevelUp() {
 		if (currentLVL + 1 < pStages.size()) {
 			currentLVL++;
+			return true;
 		}
+		return false;
 	}
 
-	public void LevelDown() {
+	public boolean LevelDown() {
 		if (currentLVL > 0) {
 			currentLVL--;
+			return true;
 		}
+		return false;
 	}
 
-	public int PutInParking(ITech ship) {
+	public int PutInParking(ITech ship) throws ParkingOverflowException,
+			ParkingAlreadyHaveException {
 		return pStages.get(currentLVL).plus(pStages.get(currentLVL), ship);
 	}
 
-	public ITech GetInParking(int index) {
+	public ITech GetInParking(int index) throws ParkingIndexOutOfRangeException {
 		return pStages.get(currentLVL).minus(pStages.get(currentLVL), index);
 	}
 
@@ -100,7 +105,8 @@ public class Parking {
 		}
 	}
 
-	public boolean load(String filename) {
+	public boolean load(String filename) throws ParkingOverflowException,
+			ParkingAlreadyHaveException {
 		File file = new File(filename);
 		if (!file.exists()) {
 			return false;
@@ -168,13 +174,16 @@ public class Parking {
 
 	public void Draw(Graphics g) {
 		DrawPort(g);
-		for (int i = 0; i < countPlaces; i++) {
-			ITech ship = pStages.get(currentLVL).getShip(i);
-			if (ship != null) {
-				ship.setPos(20 + i / 5 * placeSizeWidth, i % 5
-						* placeSizeHeight + 15);
-				ship.drawSudno(g);
-			}
+		int i = 0;
+		for (ITech ship : pStages.get(currentLVL)) {
+			ship.setPos(20 + i / 5 * placeSizeWidth, i % 5 * placeSizeHeight
+					+ 15);
+			ship.drawSudno(g);
+			i++;
 		}
+	}
+
+	public void Sort() {
+		pStages.sort(null);
 	}
 }

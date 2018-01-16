@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Random;
 
-public class Ship extends Sudno {
+public class Ship extends Sudno implements Comparable<Ship> {
 	public Ship(int maxSpeed, int maxCrew, int displacement, Color color) {
 		this.maxSpeed = maxSpeed;
 		this.maxCrew = maxCrew;
@@ -119,5 +119,56 @@ public class Ship extends Sudno {
 		return maxSpeed + ";" + maxCrew + ";" + displacement + ";"
 				+ color.getRed() + ";" + color.getGreen() + ";"
 				+ color.getBlue();
+	}
+
+	@Override
+	public int compareTo(Ship other) {
+		if (other == null) {
+			return 1;
+		}
+		if (maxSpeed != other.maxSpeed) {
+			return new Integer(maxSpeed).compareTo(other.maxSpeed);
+		}
+		if (CrewCount != other.CrewCount) {
+			return new Integer(CrewCount).compareTo(other.CrewCount);
+		}
+		if (displacement != other.displacement) {
+			return new Integer(displacement).compareTo(other.displacement);
+		}
+		if (color != other.color) {
+			return new Integer(color.getRGB()).compareTo(other.color.getRGB());
+		}
+		return 0;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == null) {
+			return false;
+		}
+		if (!(other instanceof Ship)) {
+			return false;
+		}
+		Ship ship = (Ship) other;
+		return equals(ship);
+	}
+
+	public boolean equals(Ship other) {
+		if (other == null) {
+			return false;
+		}
+		if (maxSpeed != other.maxSpeed) {
+			return false;
+		}
+		if (CrewCount != other.CrewCount) {
+			return false;
+		}
+		if (displacement != other.displacement) {
+			return false;
+		}
+		if (color != other.color) {
+			return false;
+		}
+		return true;
 	}
 }

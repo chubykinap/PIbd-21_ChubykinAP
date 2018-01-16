@@ -15,6 +15,9 @@ import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JList;
 import javax.swing.JMenuBar;
@@ -31,6 +34,8 @@ public class Form {
 	private int maxSpeed;
 	private int displacement;
 	private String[] levels = new String[6];
+	private Logger log;
+	private String logPath = "D:\\log.txt";
 	Parking port;
 	JList list;
 
@@ -55,12 +60,20 @@ public class Form {
 	 */
 	public Form() {
 		port = new Parking();
+		log = Logger.getLogger(logPath);
+		FileHandler fh = null;
+		try {
+			fh = new FileHandler(logPath);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", 0,
+					null);
+		}
+		log.addHandler(fh);
 		initialize();
 		for (int i = 0; i < 5; i++) {
 			levels[i] = "Level " + (i + 1);
 		}
 		list.setSelectedIndex(port.getLvl());
-		dopColor = Color.DARK_GRAY;
 		maxSpeed = 30;
 		maxCrew = 300;
 		displacement = 9000;
@@ -94,10 +107,10 @@ public class Form {
 				filesave.setFileFilter(filter);
 				if (filesave.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 					File file = filesave.getSelectedFile();
-					String path = file.getAbsolutePath();
-					if (port.save(path)) {
+					if (port.save(file.getAbsolutePath())) {
+						log.log(Level.INFO,
+								"Saved the port in " + file.getAbsolutePath());
 						JOptionPane.showMessageDialog(null, "Saved");
-						return;
 					} else {
 						JOptionPane.showMessageDialog(null, "Save failed", "",
 								0, null);
@@ -118,6 +131,9 @@ public class Form {
 					File file = fileChooser.getSelectedFile();
 					try {
 						if (port.load(file.getAbsolutePath())) {
+							log.log(Level.INFO,
+									"Loaded the port from "
+											+ file.getAbsolutePath());
 							JOptionPane.showMessageDialog(null, "Loaded");
 						} else {
 							JOptionPane.showMessageDialog(null, "Load failed",
@@ -133,6 +149,17 @@ public class Form {
 		});
 		menuFile.add(menuLoad);
 		color = Color.GRAY;
+
+		JButton btnSort = new JButton("Sort");
+		btnSort.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				port.Sort();
+				panel.repaint();
+			}
+		});
+		btnSort.setBounds(815, 11, 89, 23);
+		frame.getContentPane().add(btnSort);
+		dopColor = Color.DARK_GRAY;
 
 		JPanel panelGet = new JPanel();
 		panelGet.setBounds(652, 106, 275, 141);
@@ -150,14 +177,9 @@ public class Form {
 		getShip.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int place;
-				ITech ship;
+				ITech ship = null;
 				try {
 					place = Integer.parseInt(placeArea.getText()) - 1;
-					if (place > 15 && place < 1) {
-						JOptionPane.showMessageDialog(null,
-								"Wrong number", "Error", 0, null);
-						return;
-					}
 					ship = port.GetInParking(place);
 					ship.setPos(50, 50);
 				} catch (NumberFormatException e) {
@@ -168,12 +190,17 @@ public class Form {
 					JOptionPane.showMessageDialog(null, "Empty", "Error", 0,
 							null);
 					return;
+				} catch (ParkingIndexOutOfRangeException e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(),
+							"Error", 0, null);
+					return;
 				}
 				Graphics g = panelGet.getGraphics();
 				g.setColor(Color.BLACK);
 				g.drawRect(20, 20, 200, 100);
 				ship.drawSudno(g);
 				panel.repaint();
+				log.log(Level.INFO, "Took the ship from port");
 			}
 		});
 		getShip.setBounds(652, 72, 89, 23);
@@ -183,17 +210,31 @@ public class Form {
 		setShip.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				formSelect form = new formSelect(frame);
-				if (form.checkExist()) {
-					ITech ship = form.returnShip();
-					if (ship == null) {
-						JOptionPane.showMessageDialog(null, "Null element",
-								"Error", 0, null);
-						return;
+				try {
+					if (form.checkExist()) {
+						ITech ship = form.returnShip();
+						if (ship == null) {
+							JOptionPane.showMessageDialog(null, "Null element",
+									"Error", 0, null);
+							return;
+						}
+						int place = port.PutInParking(ship);
+						panel.repaint();
+						log.log(Level.INFO,
+								"Added new ship to port ¹"
+										+ (port.getLvl() + 1) + ". Its place "
+										+ (place + 1));
+						JOptionPane.showMessageDialog(null, "Your place : "
+								+ (place + 1));
 					}
-					int place = port.PutInParking(ship);
-					panel.repaint();
-					JOptionPane.showMessageDialog(null, "Your place : "
-							+ (place + 1));
+				} catch (ParkingOverflowException e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(),
+							"Error", 0, null);
+					return;
+				} catch (ParkingAlreadyHaveException e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(),
+							"Error", 0, null);
+					return;
 				}
 			}
 		});
@@ -207,7 +248,9 @@ public class Form {
 		JButton Up = new JButton(">>");
 		Up.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				port.LevelUp();
+				if (port.LevelUp()) {
+					log.log(Level.INFO, "Moved to the next port");
+				}
 				list.setSelectedIndex(port.getLvl());
 				panel.repaint();
 			}
@@ -218,7 +261,9 @@ public class Form {
 		JButton Down = new JButton("<<");
 		Down.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				port.LevelDown();
+				if (port.LevelDown()) {
+					log.log(Level.INFO, "Moved to the previous port");
+				}
 				list.setSelectedIndex(port.getLvl());
 				panel.repaint();
 			}

@@ -71,4 +71,59 @@ public class Cruiser extends Ship {
 				+ dopColor.getRed() + ";" + dopColor.getGreen() + ";"
 				+ dopColor.getBlue();
 	}
+	
+	public int compareTo(Cruiser other) {
+		if (other == null) {
+			return 1;
+		}
+		if (maxSpeed != other.maxSpeed) {
+			return new Integer(maxSpeed).compareTo(other.maxSpeed);
+		}
+		if (CrewCount != other.CrewCount) {
+			return new Integer(CrewCount).compareTo(other.CrewCount);
+		}
+		if (displacement != other.displacement) {
+			return new Integer(displacement).compareTo(other.displacement);
+		}
+		if (color != other.color) {
+			return new Integer(color.getRGB()).compareTo(other.color.getRGB());
+		}if (dopColor != other.dopColor) {
+			return new Integer(dopColor.getRGB()).compareTo(other.dopColor.getRGB());
+		}
+		return 0;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == null) {
+			return false;
+		}
+		if (!(other instanceof Cruiser)) {
+			return false;
+		}
+		Ship ship = (Cruiser) other;
+		return equals(ship);
+	}
+
+	public boolean equals(Cruiser other) {
+		if (other == null) {
+			return false;
+		}
+		if (maxSpeed != other.maxSpeed) {
+			return false;
+		}
+		if (CrewCount != other.CrewCount) {
+			return false;
+		}
+		if (displacement != other.displacement) {
+			return false;
+		}
+		if (color != other.color) {
+			return false;
+		}
+		if (dopColor != other.dopColor) {
+			return false;
+		}
+		return true;
+	}
 }
